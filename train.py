@@ -14,7 +14,7 @@ def train(input_file):
 
 
 def compression_ratio(text, encoded):
-    return len(encoded.ids) / len(text)
+    return len(text) / len(encoded.ids)
 
 
 def main():
@@ -27,7 +27,7 @@ def main():
     input_file = sys.argv[1]
     train(input_file)
     load_tokenizer = Tokenizer.from_file("hindi_tokenizer.json")
-    text = "मेरा नाम पीटर है| आप का नाम क्या है?"
+    text = """कई मुश्किलों के बावजूद स्टार्मर ने कभी हार नहीं मानी. वे बचपन से ही पढ़ाई में अच्छे थे, परीक्षाओं में अच्छे नंबर लाने की वजह से ही उनका एडमिशन एक प्रत..."""
     encode_text = load_tokenizer.encode(text)
 
     print(f"Original text: {text}")

@@ -34,4 +34,6 @@ combine_files "$TRAIN_DIR" "$TRAIN_OUTPUT"
 # Combine validation files
 combine_files "$VALID_DIR" "$VALID_OUTPUT"
 
+cat "$TRAIN_OUTPUT" "$VALID_OUTPUT" > hindi_wiki_172k_full.txt
+
 echo "Process completed."
