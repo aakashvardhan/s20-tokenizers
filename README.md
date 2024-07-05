@@ -21,3 +21,4 @@ Decoded text: कई मुश्किलों के बावजूद स�
 
 ## Screenshots from Hugging Face Gradio Interface
 
+![image](https://github.com/aakashvardhan/s20-tokenizers/blob/main/assets/Screenshot%202024-07-05%20at%205.09.12%E2%80%AFPM.png)
