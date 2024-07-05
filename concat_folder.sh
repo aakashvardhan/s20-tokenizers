@@ -1,42 +1,37 @@
 #!/bin/bash
 
-# Check if the correct number of arguments are provided
-if [ "$#" -ne 2 ]; then
-    echo "Usage: $0 source_folder output_file"
-    exit 1
-fi
+# Set paths
+ZIP_FILE="archive.zip"
+EXTRACT_DIR="."
+TRAIN_DIR="$EXTRACT_DIR/train/train"
+VALID_DIR="$EXTRACT_DIR/valid/valid"
+TRAIN_OUTPUT="$EXTRACT_DIR/hindi_wiki_172k_train.txt"
+VALID_OUTPUT="$EXTRACT_DIR/hindi_wiki_172k_valid.txt"
 
-# Assign arguments to variables
-SOURCE_FOLDER=$1
-OUTPUT_FILE=$2
+# Extract the zip file
+unzip -q "$ZIP_FILE" -d "$EXTRACT_DIR"
 
-touch "$OUTPUT_FILE"
+# Function to combine text files
+combine_files() {
+    local input_dir=$1
+    local output_file=$2
+    
+    # Clear the output file if it exists
+    > "$output_file"
+    
+    # Combine all .txt files, adding <|endoftext|> and a newline after each file
+    for file in "$input_dir"/*.txt; do
+        cat "$file" >> "$output_file"
+        echo "<|endoftext|>" >> "$output_file"
+    done
+    
+    echo "Combined text saved to: $output_file"
+}
 
-# Check if source folder exists
-if [ ! -d "$SOURCE_FOLDER" ]; then
-    echo "Source folder '$SOURCE_FOLDER' does not exist."
-    exit 1
-fi
+# Combine training files
+combine_files "$TRAIN_DIR" "$TRAIN_OUTPUT"
 
-# Concatenate all text files in the source folder into the output file using find and xargs
-find "$SOURCE_FOLDER" -type f -name '*.txt' -print0 | xargs -0 cat > "$OUTPUT_FILE"
+# Combine validation files
+combine_files "$VALID_DIR" "$VALID_OUTPUT"
 
-# Check if the concatenation was successful
-if [ $? -eq 0 ]; then
-    echo "All text files in '$SOURCE_FOLDER' have been successfully concatenated into '$OUTPUT_FILE'."
-else
-    echo "An error occurred while concatenating the files."
-    exit 1
-fi
-
-# Delete the original folder
-
-rm -rf "$SOURCE_FOLDER"
-
-# Check if the deletion was successful
-if [ $? -eq 0 ]; then
-    echo "$SOURCE_FOLDER' has been successfully deleted."
-else
-    echo "An error occurred while deleting the original files."
-    exit 1
-fi
+echo "Process completed."
